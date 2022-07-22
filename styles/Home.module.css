@@ -114,6 +114,7 @@
     flex-direction: column;
   }
 }
+<<<<<<< HEAD
 
 @media (prefers-color-scheme: dark) {
   .card,
@@ -127,3 +128,5 @@
     filter: invert(1);
   }
 }
+=======
+>>>>>>> c6dcafd4de9d06a838cf27a2c3868db1458914e6
