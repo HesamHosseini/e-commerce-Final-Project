@@ -3,13 +3,16 @@ import Image from "next/image";
 import Footer from "../Components/Footer/Footer";
 import Header from "../Components/Header/Header";
 import Test from "../Components/Header/Drower";
+import Main from "../Layouts/Main";
+import { useRouter } from "next/router";
 
 export default function Home() {
+
   return (
-    <div>
-      <Header />
-      <Footer />
-      <Test />
-    </div>
+    <Main>
+      <div>
+        <Test />
+      </div>
+    </Main>
   );
 }
