@@ -1,6 +1,11 @@
+import ContextProvider from "../Layouts/contextProvider";
 import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return (
+    <ContextProvider>
+      <Component {...pageProps} />
+    </ContextProvider>
+  );
 }
 
 export default MyApp;
