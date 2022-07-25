@@ -5,6 +5,7 @@ import { TiLocationOutline } from "react-icons/ti";
 function Footer() {
   return (
     <div className=" flex w-full items-center justify-between px-4 py-5 bg-gray-800 text-myWhite-1 mt-10">
+   
       <div className="flex flex-col rtl">
         <div className="flex flex-row justify-start">
           <Image src="/footerItems/enamad.png" width="100px" height="100px" />
@@ -22,7 +23,14 @@ function Footer() {
         </div>
       </div>
       <div className="rtl pr-4 font-IRYekan text-sm flex flex-col justify-between gap-5">
-        <li className="list-disc cursor-pointer">برگشت به بالا</li>
+        <li
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="list-disc cursor-pointer"
+        >
+          برگشت به بالا
+        </li>
         <li className="list-disc cursor-pointer">دسته بندی ها</li>
         <li className="list-disc cursor-pointer">خانه </li>
         <li className="list-disc cursor-pointer">ارتباط با ما</li>
