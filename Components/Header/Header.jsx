@@ -43,7 +43,7 @@ function Header(props) {
       </div>
       {/* ************************************ mobile Header
        ************************************* */}
-      <div className="mobileMenu  justify-between px-20 py-3 text-h1 w-full items-center bg-secondary-1">
+      <div className="mobileMenu  justify-between px-10 py-3 text-h1 w-full items-center bg-secondary-1">
         <div className="flex-center gap-4">
           <Image
             className="rounded-[50%]"

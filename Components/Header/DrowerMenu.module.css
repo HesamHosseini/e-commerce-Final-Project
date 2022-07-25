@@ -1,6 +1,6 @@
 @keyframes DrowerIn {
     0% {
-        right: -30%;
+        right: -50%;
     }
     100% {
         right: 0%;
@@ -13,7 +13,7 @@
         right: 0%;
     }
     100% {
-        right: -30%;
+        right: -50%;
 
     }
 }
