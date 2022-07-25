@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+  font-family: "IRYekanBold";
+  src: url("../public/fonts//iran-yekan/IRYekanBold.ttf");
+}
+@font-face {
+  font-family: "IRYekan";
+  src: url("../public/fonts//iran-yekan/IRYekan.ttf");
+}
+
+
+.rtl {
+  direction: rtl;
+}
+
+@layer components {
+
+  .desktopMenu {
+    @apply md:flex lg:flex hidden 
+  }
+
+  .mobileMenu{
+    @apply  md:hidden lg:hidden flex
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center
+  }
+}
+
+
+.rtl {
+  direction: rtl;
+}
