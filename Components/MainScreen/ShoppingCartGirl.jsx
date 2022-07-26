@@ -10,9 +10,9 @@ function ShoppingCartGirl(props) {
       </div>
       <div className="flex flex-col gap-4  ">
         <div className="rtl cursor-default">بهترین خرید ها در حسام کالا</div>
-        <div>
+        <div className="flex-center">
           <MyButton
-            bgColor="primary-1"
+            bgColor="bg-primary-1"
             size="small"
             title="شروع به خرید کنید"
           />
