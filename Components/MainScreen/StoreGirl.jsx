@@ -7,7 +7,7 @@ function StoreGirl(props) {
   return (
     <div className="flex rounded-3xl flex-col bg-secondary-2 w-full text-myWhite-2">
       <div className="flex-center flex-col">
-        <h1 className="text-h3 font-IRYekanBold rtl">به ما اعتماد کنید</h1>
+        <h1 className="text-h4 font-IRYekanBold rtl">به ما اعتماد کنید</h1>
         <div className="flex-col flex-center gap-3">
           <li
             className={`${styles.listItems} rtl font-IRYekan text-p16 text-myWhite-1`}
