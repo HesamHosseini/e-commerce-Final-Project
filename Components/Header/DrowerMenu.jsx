@@ -37,7 +37,7 @@ function DrowerMenu(props) {
             : isOpen == 2
             ? `${styles.DrowerAnimationOut} flex`
             : ""
-        } w-[50vw]  font-IRYekan z-20 h-[100vh] bg-myWhite-1 p-4 top-0 fixed flex-col  items-center`}
+        } w-[50vw] min-w-max font-IRYekan z-20 h-[100vh] bg-myWhite-1 p-4 top-0 fixed flex-col  items-center`}
       >
         <div
           className="self-end text-h1"

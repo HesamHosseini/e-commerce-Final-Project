@@ -6,7 +6,7 @@ import { MdOutlineExpandMore } from "react-icons/md";
 
 function CustumDiscosure({ items, Children, route }) {
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl ">
+    <div className=" w-full rounded-2xl ">
       <Disclosure as="div" className="">
         {({ open }) => (
           <>
