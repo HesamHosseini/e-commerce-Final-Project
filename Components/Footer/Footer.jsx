@@ -5,7 +5,6 @@ import { TiLocationOutline } from "react-icons/ti";
 function Footer() {
   return (
     <div className=" flex w-full items-center justify-between px-4 py-5 bg-gray-800 text-myWhite-1 mt-10">
-   
       <div className="flex flex-col rtl">
         <div className="flex flex-row justify-start">
           <Image src="/footerItems/enamad.png" width="100px" height="100px" />
@@ -14,7 +13,7 @@ function Footer() {
         <div className="flex flex-col font-IRYekan  text-sm justify-center gap-4 my-3">
           <div className="flex flex-row items-center gap-3">
             <AiFillPhone />
-            <span>۰۲۱۳۳۶۲۵۶۱</span>
+            <a href="tel:123-456-7890">323_451_432</a>
           </div>
           <div className="flex flex-row items-center gap-3">
             <TiLocationOutline />

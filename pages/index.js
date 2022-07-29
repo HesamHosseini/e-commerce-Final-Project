@@ -1,3 +1,4 @@
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +8,10 @@ import MySwiper from "../Components/MainScreen/MySwiper/MySwiper";
 import SearchCard from "../Components/MainScreen/SearchCard";
 import ShoppingCartGirl from "../Components/MainScreen/ShoppingCartGirl";
 import StoreGirl from "../Components/MainScreen/StoreGirl";
+import ProductCard from "../Components/ProductCard/ProductCard";
 import MainLayout from "../Layouts/MainLayout";
-
-export default function Home({ data }) {
-  console.log(data[0].image);
+export default function Home({ categories, products }) {
+  console.log(products);
   return (
     <MainLayout>
       <Head>
@@ -38,19 +39,42 @@ export default function Home({ data }) {
       <div className="grid grid-cols-12 my-4">
         <div></div>
         <div className="col-span-10  flex-center ">
-          <CategorySummery categories={data} />
+          <CategorySummery categories={categories} />
         </div>
         <div></div>
+      </div>
+      <div className="w-full bg-secondary-1 text-myWhite-1 p-5 ">
+        <h1 className="rtl font-IRYekan">دسته بندی دیجیتال</h1>
+        <div className="w-full  grid grid-cols-12 px-24 py-3 md:gap-20 gap-4 justify-end">
+          {products.map((product) => {
+            return product.category === 1 ? (
+              <div className="col-span-12 md:col-span-6 lg:col-span-4 ">
+                <ProductCard data={product} />
+              </div>
+            ) : null;
+          })}
+        </div>
       </div>
     </MainLayout>
   );
 }
 export async function getServerSideProps(context) {
   const res = await fetch("http://localhost:8000/store/category");
-  const data = await res.json();
+  const categories = await res.json();
+
+  const productsPromis = await axios.get(
+    "http://localhost:8000/store/product",
+    {
+      headers: {
+        Authorization: "Token daa15a1f35ec2dcdaa608ca1380a173e4d39e410",
+      },
+    }
+  );
+  const products = await productsPromis.data;
   return {
     props: {
-      data,
-    }, // will be passed to the page component as props
+      categories,
+      products,
+    },
   };
 }
