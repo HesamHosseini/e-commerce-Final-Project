@@ -45,7 +45,7 @@ export default function Home({ categories, products }) {
       </div>
       <div className="w-full bg-secondary-1 text-myWhite-1 p-5 ">
         <h1 className="rtl font-IRYekan">دسته بندی دیجیتال</h1>
-        <div className="w-full  grid grid-cols-12 px-24 py-3 md:gap-20 gap-4 justify-end">
+        <div className="w-full  grid grid-cols-12 md:px-24 py-3 lg:gap-20 gap-4 justify-end">
           {products.map((product) => {
             return product.category === 1 ? (
               <div className="col-span-12 md:col-span-6 lg:col-span-4 ">
