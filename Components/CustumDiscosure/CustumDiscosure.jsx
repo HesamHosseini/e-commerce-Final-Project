@@ -6,7 +6,7 @@ import { MdOutlineExpandMore } from "react-icons/md";
 
 function CustumDiscosure({ items, Children, route }) {
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl ">
+    <div className=" w-full rounded-2xl ">
       <Disclosure as="div" className="">
         {({ open }) => (
           <>
@@ -27,7 +27,11 @@ function CustumDiscosure({ items, Children, route }) {
               leaveTo="transform scale-95 opacity-0"
             >
               {items.map((item) => (
-                <Link href={`${route}/${item.name}`} className="hover:">
+                <Link
+                  key={item.name}
+                  href={`${route}/${item.name}`}
+                  className="hover:"
+                >
                   <Disclosure.Panel className="my-5 cursor-pointer hover:bg-blue-100 border flex justify-between px-5 py-2 text-secondary-1 items-center text-sm  border-secondary-2 rounded-2xl text-gray-500">
                     <div> {item.name}</div>
                     <div>{item.icon} </div>
