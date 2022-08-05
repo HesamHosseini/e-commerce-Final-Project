@@ -85,7 +85,7 @@ function category({ data, params, singleCategory, shit }) {
           {/* <label htmlFor="avalibility">نمایش کالا های موجود </label>
             <input id="avalibility" type="checkbox" /> */}
         </div>
-        <div className="col-span-12 md:col-span-9 grid grid-cols-12  bg-red-400">
+        <div className="col-span-12 md:col-span-9 grid grid-cols-12 ">
           {data.map((item) => (
             <div className="col-span-3 gap-4">
               <ProductCard data={item} />
