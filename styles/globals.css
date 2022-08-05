@@ -15,8 +15,11 @@
 
 .rtl {
   direction: rtl;
-}
 
+}
+.ltr {
+  direction: ltr;
+}
 @layer components {
 
   .desktopMenu {

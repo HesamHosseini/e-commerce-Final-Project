@@ -98,10 +98,9 @@ export async function getStaticPaths() {
       singleProductId: `${product.id}`,
     },
   }));
-  console.log(ProductIds);
   return {
     paths: ProductIds,
-    fallback: true, // false or 'blocking'
+    fallback: false, // false or 'blocking'
   };
 }
 
