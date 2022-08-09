@@ -48,7 +48,10 @@ export default function Home({ categories, products }) {
         <div className="w-full  grid grid-cols-12 md:px-24 py-3 lg:gap-20 gap-4 justify-end">
           {products.map((product) => {
             return product.category === 1 ? (
-              <div className="col-span-12 md:col-span-6 lg:col-span-4 ">
+              <div
+                key={product.id}
+                className="col-span-12 md:col-span-6 lg:col-span-4 "
+              >
                 <ProductCard data={product} />
               </div>
             ) : null;

@@ -29,9 +29,12 @@ function category({ data, childCategories, thisCategory }) {
   const dispatch = useDispatch();
   const filterState = useSelector((state) => state.categoryFilter.value);
 
-  const categoryFilterOptions = childCategories.map((category) => {
-    return { name: category.name, id: category.id };
-  });
+  console.log(thisCategory);
+  const categoryFilterOptions = childCategories
+    ? childCategories.map((category) => {
+        return { name: category.name, id: category.id };
+      })
+    : [];
 
   const handlePriceOrder = (product) => {
     const temp = [...product];
@@ -78,6 +81,7 @@ function category({ data, childCategories, thisCategory }) {
         return products.filter((item) => item.price !== item.final_price);
     }
   };
+
   console.log(thisCategory.name);
   return (
     <MainLayout>
@@ -242,18 +246,22 @@ export async function getStaticProps({ params }) {
     `http://localhost:8000/store/product/category/slug/${params.category}`
   );
   const Mainproducts = await response.data;
+
   let data = [...Mainproducts];
 
-  for (const childrenCategories of singleCategory[0].children) {
-    const response = await axios
-      .get(
-        `http://localhost:8000/store/product/category/slug/${childrenCategories.slug}`
-      )
-      .then((res) => res.data);
-    response.forEach((item) => {
-      data.push(item);
-    });
+  if (singleCategory[0].children) {
+    for (const childrenCategories of singleCategory[0].children) {
+      const response = await axios
+        .get(
+          `http://localhost:8000/store/product/category/slug/${childrenCategories.slug}`
+        )
+        .then((res) => res.data);
+      response.forEach((item) => {
+        data.push(item);
+      });
+    }
   }
+
   const thisCategory = categories.filter(
     (item) => item.slug == params.category
   )[0];
