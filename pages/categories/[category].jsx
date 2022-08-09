@@ -1,47 +1,108 @@
-import { Menu } from "@headlessui/react";
 import axios from "axios";
-import React from "react";
-
+import React, { useState } from "react";
 import MyListBox from "../../Components/MyListBox/MyListBox";
 import MainLayout from "../../Layouts/MainLayout";
-import { setCookie } from "cookies-next";
 import CustumDiscosure from "../../Components/CustumDiscosure/CustumDiscosure";
 import ToggleSwitch from "../../Components/ToggleSwitch/ToggleSwitch";
+import ProductCard from "../../Components/ProductCard/ProductCard";
+
+// ************** icons
 import { FaFilter } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
 import { GrFormClose } from "react-icons/gr";
 import { BiSearchAlt } from "react-icons/bi";
 import { MdPhonelink } from "react-icons/md";
-import { setMobileFilterOpen } from "../../redux/slices/CategoryFilterSlice";
-import ProductCard from "../../Components/ProductCard/ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+
+// ************ reducers
+import {
+  setDiscountFilter,
+  setMobileFilterOpen,
+  setPriceOrder,
+  setSubCategoryfilter,
+} from "../../redux/slices/CategoryFilterSlice";
+
+// ************ animation CSS module
 import styles from "./category.module.css";
-const listBoxItems = [
-  { name: "asghar" },
-  { name: "mamad" },
-  { name: "hamed" },
-  { name: "ali" },
-  { name: "Gholi" },
-  { name: "Hossein" },
-];
+import Head from "next/head";
 
-function category({ data, params, singleCategory, shit }) {
+function category({ data, childCategories, thisCategory }) {
   const dispatch = useDispatch();
-
   const filterState = useSelector((state) => state.categoryFilter.value);
-  console.log(filterState);
-  const a = Date.now() + 10000;
-  const date = new Date(a);
 
-  setCookie("mamad ", "token", { expires: date });
+  const categoryFilterOptions = childCategories.map((category) => {
+    return { name: category.name, id: category.id };
+  });
 
+  const handlePriceOrder = (product) => {
+    const temp = [...product];
+    switch (filterState.priceOrder) {
+      case "همه":
+        return product;
+      case "ارزان به گران":
+        return temp.sort((a, b) =>
+          Math.floor(a.price) > Math.floor(b.price)
+            ? 1
+            : Math.floor(b.price) > Math.floor(a.price)
+            ? -1
+            : 0
+        );
+      case "گران به ارزان":
+        return temp.sort((a, b) =>
+          Math.floor(b.price) > Math.floor(a.price)
+            ? 1
+            : Math.floor(a.price) > Math.floor(b.price)
+            ? -1
+            : 0
+        );
+    }
+  };
+
+  const handleSubCategoryFilter = (products) => {
+    if (filterState.subCategoryfilter === "همه دسته بندی ها") {
+      return products;
+    } else {
+      const categoryID = childCategories.filter(
+        (category) => category.name === filterState.subCategoryfilter
+      )[0].id;
+      return products.filter((product) => product.category == categoryID);
+    }
+  };
+
+  const handleDiscountFilter = (products) => {
+    switch (filterState.discountFilter) {
+      case "همه محصولات":
+        return products;
+      case "بدون تخفیف":
+        return products.filter((item) => item.price === item.final_price);
+      case "باتخفیف":
+        return products.filter((item) => item.price !== item.final_price);
+    }
+  };
+  console.log(thisCategory.name);
   return (
     <MainLayout>
-      <div className=" z-[3]  flex-center flex-row w-full gap-3 md:gap-32 p-4 border-b-2 border-gray-100">
-        <div>
-          <MyListBox data={listBoxItems} hoverColor="bg-primary-1" />
+      <Head>
+        <title>دسته بندی : {thisCategory.name}</title>
+        <link rel="shortcut icon" href="/logo2.jpeg" />
+      </Head>
+      <div className="flex flex-col md:grid md:grid-cols-3  w-full gap-3 md:gap-32 p-4 border-b-2 border-gray-100">
+        <div className="z-[5] ">
+          <MyListBox
+            data={[
+              { name: "همه محصولات" },
+              { name: "باتخفیف" },
+              { name: "بدون تخفیف" },
+            ]}
+            state={filterState.discountFilter}
+            func={setDiscountFilter}
+          />
         </div>
-        <div>
-          <MyListBox data={listBoxItems} />
+        <div className="z-[3]">
+          <MyListBox
+            data={[{ name: "همه دسته بندی ها" }, ...categoryFilterOptions]}
+            state={filterState.subCategoryfilter}
+            func={setSubCategoryfilter}
+          />
         </div>
         <button
           onClick={() => {
@@ -55,24 +116,25 @@ function category({ data, params, singleCategory, shit }) {
           <span>فیلتر ها</span>
         </button>
       </div>
+      <div className="rtl font-IRYekanBold text-h6 md:text-h4 px-5 text-myBlack-1 py-3 ">
+        <span className="text-secondary-2">دسته بندی :</span>
+        {thisCategory.name}
+      </div>
       <div className="grid grid-cols-12 rtl">
         <div className="hidden md:flex md:col-span-3 bg-secondary-1 min-h-[50vh]  gap-4 items-center flex-col p-4">
           <div className="priceFilter flex-center flex-col gap-4 rtl font-IRYekan">
             <div className="text-myWhite-1">محدوده قیمت (به تومان):</div>
-            <input
-              type="number"
-              placeholder="از "
-              className="px-4 text-myBlack-1  
-              rounded-2xl
-              font-IRYekan text-[10px] md:text-p16 focus-visible:border-primary-1 focus-visible:border-2 focus-visible: outline-none shadow-none"
-            />
-            <input
-              type="number"
-              placeholder="تا"
-              className="px-4 text-myBlack-1  
-              rounded-2xl
-              font-IRYekan text-[10px] md:text-p16 focus-visible:border-primary-1 focus-visible:border-2 focus-visible: outline-none shadow-none"
-            />
+            <div className="z-[4] w-full">
+              <MyListBox
+                data={[
+                  { name: "همه" },
+                  { name: "گران به ارزان" },
+                  { name: "ارزان به گران" },
+                ]}
+                state={filterState.priceOrder}
+                func={setPriceOrder}
+              />
+            </div>
             <div></div>
           </div>
           <div className="rtl flex-center flex-row font-IRYekan gap-3">
@@ -81,19 +143,22 @@ function category({ data, params, singleCategory, shit }) {
               <ToggleSwitch />
             </div>
           </div>
-
-          {/* <label htmlFor="avalibility">نمایش کالا های موجود </label>
-            <input id="avalibility" type="checkbox" /> */}
         </div>
-        <div className="col-span-12 md:col-span-9 grid grid-cols-12 ">
-          {data.map((item) => (
-            <div className="col-span-3 gap-4">
+        <div className="col-span-12 md:col-span-9 grid grid-cols-12 gap-4">
+          {handleDiscountFilter(
+            handleSubCategoryFilter(handlePriceOrder(data))
+          ).map((item) => (
+            <div
+              key={item.id}
+              className="col-span-12 md:col-span-6  xl:col-span-4 gap-4 "
+            >
               <ProductCard data={item} />
             </div>
           ))}
         </div>
       </div>
 
+      {/* mobile filter sideBar  */}
       <div className="z-10">
         <>
           <div
@@ -119,7 +184,7 @@ function category({ data, params, singleCategory, shit }) {
                 : filterState.mobileFilterOpen == 2
                 ? `${styles.DrowerAnimationOut} flex`
                 : ""
-            } w-[50vw] min-w-max font-IRYekan z-20 h-[100vh] bg-myWhite-1 p-4 top-0 fixed flex-col  items-center`}
+            } w-[50vw] min-w-max font-IRYekan z-20 h-[100vh] bg-secondary-1 p-4 top-0 fixed flex-col  items-center`}
           >
             <div
               className="self-end text-h1"
@@ -129,33 +194,19 @@ function category({ data, params, singleCategory, shit }) {
             >
               <GrFormClose></GrFormClose>
             </div>
-            <div id="menuItems">
-              <div className="flex-center  ">
-                <i className="text-h4">
-                  <BiSearchAlt />
-                </i>
-
-                <input
-                  className="px-12 py-3 rtl text-[12px] rounded-md focus-visible:border-primary-1 focus-visible:border-2 focus-visible: outline-none shadow-none"
-                  placeholder="دنبال چی میگردی"
-                />
-              </div>
-              <div className="rtl">
-                <CustumDiscosure
-                  // route={"/categories"}
-                  items={[
-                    { name: "کالای دیجیتال", icon: <MdPhonelink /> },
-                    {
-                      name: "خودرو، ابزار و تجهیزات صنعتی",
-                      icon: <MdPhonelink />,
-                    },
-                    { name: "مد و پوشاک", icon: <MdPhonelink /> },
-                    ,
-                    ,
-                  ]}
-                />
-              </div>
+            <div className="text-myWhite-1">محدوده قیمت (به تومان):</div>
+            <div className="z-[4] w-full">
+              <MyListBox
+                data={[
+                  { name: "همه" },
+                  { name: "گران به ارزان" },
+                  { name: "ارزان به گران" },
+                ]}
+                state={filterState.priceOrder}
+                func={setPriceOrder}
+              />
             </div>
+            <div></div>
           </div>
         </>
       </div>
@@ -193,23 +244,25 @@ export async function getStaticProps({ params }) {
   const Mainproducts = await response.data;
   let data = [...Mainproducts];
 
-  // let daataa = [];
+  for (const childrenCategories of singleCategory[0].children) {
+    const response = await axios
+      .get(
+        `http://localhost:8000/store/product/category/slug/${childrenCategories.slug}`
+      )
+      .then((res) => res.data);
+    response.forEach((item) => {
+      data.push(item);
+    });
+  }
+  const thisCategory = categories.filter(
+    (item) => item.slug == params.category
+  )[0];
 
-  // await singleCategory[0].children.map((element) => {
-  //   daataa.push(
-  //     fetch(`http://localhost:8000/store/product/category/slug/${element.slug}`)
-  //   );
-  // });
-  // let results = await Promise.all(daataa);
-  // const shit =  results.map(async (item) => await item.json());
-
-  // const mamad = await fetch(
-  //   `http://localhost:8000/store/product/category/slug/digital-and-electronic`
-  // );
-  // const shit = await mamad.json();
   return {
     props: {
       data,
+      childCategories: singleCategory[0].children,
+      thisCategory,
     }, // will be passed to the page component as props
   };
 }

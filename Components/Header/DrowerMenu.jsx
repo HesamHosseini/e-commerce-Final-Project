@@ -11,7 +11,7 @@ import CustumDiscosure from "../CustumDiscosure/CustumDiscosure";
 function DrowerMenu(props) {
   const isOpen = useSelector((state) => state.header.value.drowerState);
   const dispatch = useDispatch();
-  console.log(isOpen);
+
   return (
     <>
       <div

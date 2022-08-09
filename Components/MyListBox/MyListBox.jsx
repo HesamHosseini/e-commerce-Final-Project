@@ -2,16 +2,20 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { BiCheck } from "react-icons/bi";
 import { MdOutlineUnfoldMore } from "react-icons/md";
+import { useDispatch } from "react-redux";
 
-export default function MyListBox({ data }) {
-  const [selected, setSelected] = useState(data[0]);
-  console.log(selected);
-  console.log(data);
+export default function MyListBox({ data, func, state }) {
+  const dispatch = useDispatch();
+
   return (
-    <Listbox value={selected} onChange={setSelected} className="w-full">
+    <Listbox
+      value={state}
+      onChange={(e) => dispatch(func(e.name))}
+      className="w-full"
+    >
       <div className="relative mt-1 w-full">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
-          <span className="block truncate">{selected.name}</span>
+        <Listbox.Button className="font-IRYekan relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
+          <span className="block truncate">{state}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <MdOutlineUnfoldMore
               className="h-5 w-5 text-gray-400"
@@ -32,8 +36,8 @@ export default function MyListBox({ data }) {
               <Listbox.Option
                 key={personIdx}
                 className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? "bg-primary-2 text-blue-900" : "text-gray-900"
+                  `font-IRYekan relative cursor-default select-none py-2 pl-10 pr-4 ${
+                    active ? "bg-secondary-2 text-myWhite-1" : "text-gray-900"
                   }`
                 }
                 value={person}
