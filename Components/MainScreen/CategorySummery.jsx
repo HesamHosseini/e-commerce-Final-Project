@@ -9,17 +9,14 @@ function CategorySummery({ categories }) {
     <div className="w-full rounded-xl bg-slate-50 shadow-md">
       <Swiper
         className="w-full flex-center"
-        modules={[Navigation, Scrollbar, A11y, Pagination]}
-        
+        modules={[]}
         spaceBetween={30}
-        // slidesPerView={2}
-        scrollbar={{ draggable: true }}
         effect="fade"
       >
         {categories.map((category) => {
           return category.parent === null ? (
             <SwiperSlide className="bg-primary-1 cursor-pointer  rounded-[50%] !w-20 !h-20 md:!w-28 md:!h-28     font-IRYekan flex-center  hover:bg-primary-2 transition-all ">
-              <Link href={`/categories/${category.name}`}>
+              <Link href={`/categories/${category.slug}`}>
                 <div className=" my-auto flex-center flex-col justify-evenly">
                   <Image src={category.image} width={24} height={24} />
                   <div className=" w-18 md:w-24  rtl text-center text-[9px] md:text-sm">
