@@ -2,6 +2,7 @@ import React from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { BsFillChatSquareTextFill, BsCheck } from "react-icons/bs";
+import { AiOutlineUser } from "react-icons/ai";
 function MyInput({ placeHolder, type, value, onChange, validationstate }) {
   return (
     <div className="w-full  rtl flex-center justify-between bg-myWhite-1 rounded-lg gap-5 px-10">
@@ -36,6 +37,10 @@ function MyInput({ placeHolder, type, value, onChange, validationstate }) {
       ) : type == "text" ? (
         <span>
           <BsFillChatSquareTextFill />
+        </span>
+      ) : type == "username" ? (
+        <span>
+          <AiOutlineUser />
         </span>
       ) : null}
 

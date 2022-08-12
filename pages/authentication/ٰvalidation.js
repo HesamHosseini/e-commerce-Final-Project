@@ -1,12 +1,11 @@
-export const emailValidation = (
+export const useNameValidation = (
   inputValue,
   validationState,
   validationSetter
 ) => {
-  let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
   const temp = { ...validationState };
   if (inputValue !== "") {
-    if (regex.test(inputValue)) {
+    if (inputValue.length >= 3) {
       temp.email = 2;
       validationSetter(temp);
     } else {

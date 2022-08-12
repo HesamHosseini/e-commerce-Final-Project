@@ -3,7 +3,11 @@ import MyButton from "../../Components/Button/MyButton";
 import { AiOutlineLogin } from "react-icons/ai";
 import { getCookie, setCookie } from "cookies-next";
 import MyInput from "../../Components/MyInput/MyInput";
-import { emailValidation, passwordValidation } from "./ٰvalidation";
+import {
+  emailValidation,
+  passwordValidation,
+  useNameValidation,
+} from "./ٰvalidation";
 import axios from "axios";
 
 function Login() {
@@ -12,7 +16,7 @@ function Login() {
   // console.log(a);
   // const data = [{ name: "ali" }, { name: "gholi" }, { name: "mamad" }];
 
-  const [emailInput, setEmailInput] = useState("");
+  const [userNameInput, setUserNameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [loginValidation, setLoginValidation] = useState({
     email: 0,
@@ -20,8 +24,8 @@ function Login() {
   });
 
   useEffect(() => {
-    emailValidation(emailInput, loginValidation, setLoginValidation);
-  }, [emailInput]);
+    useNameValidation(userNameInput, loginValidation, setLoginValidation);
+  }, [userNameInput]);
 
   useEffect(() => {
     passwordValidation(passwordInput, loginValidation, setLoginValidation);
@@ -29,16 +33,18 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post("https://reqres.in/api/login", {
+    const res = await fetch("http://localhost:8000/user/login/", {
+      method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      data: {
-        email: passwordInput,
-        password: passwordInput,
-      },
+      body: JSON.stringify({
+        username: `${userNameInput}`,
+        password: `${passwordInput}`,
+      }),
     });
-    const datt = await res.data;
+    const datt = await res.json();
     console.log(datt);
   };
 
@@ -71,10 +77,10 @@ function Login() {
           >
             <MyInput
               validationstate={loginValidation}
-              placeHolder="ایمیل"
-              type="email"
-              value={emailInput}
-              onChange={setEmailInput}
+              placeHolder="نام کاربری"
+              type="username"
+              value={userNameInput}
+              onChange={setUserNameInput}
             />
           </div>
           {loginValidation.email === 1 ? (
