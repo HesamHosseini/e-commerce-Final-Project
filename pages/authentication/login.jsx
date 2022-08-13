@@ -9,6 +9,12 @@ import {
   useNameValidation,
 } from "./ٰvalidation";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import {
+  setUserData,
+  setUserLoginStatus,
+} from "../../redux/slices/loginStatusSlice";
 
 function Login() {
   // const a = Date.now();
@@ -18,6 +24,7 @@ function Login() {
 
   const [userNameInput, setUserNameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const router = useRouter();
   const [loginValidation, setLoginValidation] = useState({
     email: 0,
     password: 0,
@@ -31,6 +38,7 @@ function Login() {
     passwordValidation(passwordInput, loginValidation, setLoginValidation);
   }, [passwordInput]);
 
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await fetch("http://localhost:8000/user/login/", {
@@ -45,7 +53,15 @@ function Login() {
       }),
     });
     const datt = await res.json();
-    console.log(datt);
+    if (datt.token) {
+      setCookie("token", JSON.stringify(datt), {
+        maxAge: 60 * 60 * 24 * 4,
+      });
+      dispatch(setUserData(datt));
+      dispatch(setUserLoginStatus(true));
+
+      router.back();
+    }
   };
 
   return (
