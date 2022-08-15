@@ -1,0 +1,14 @@
+
+@font-face {
+    font-family: "IRYekanBold";
+    src: url("../../public/fonts/iran-yekan/IRYekanBold.ttf");
+  }
+  @font-face {
+    font-family: "IRYekan";
+    src: url("../../public/fonts/iran-yekan/IRYekan.ttf");
+  }
+
+.fontYekan {
+ font-family:  "IRYekan";
+ font-size: 12px;
+}

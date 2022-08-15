@@ -3,6 +3,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { BsFillChatSquareTextFill, BsCheck } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
+import { ToastContainer } from "react-toastify";
 function MyInput({ placeHolder, type, value, onChange, validationstate }) {
   return (
     <div className="w-full  rtl flex-center justify-between bg-myWhite-1 rounded-lg gap-5 px-10">
@@ -39,11 +40,21 @@ function MyInput({ placeHolder, type, value, onChange, validationstate }) {
           <BsFillChatSquareTextFill />
         </span>
       ) : type == "username" ? (
-        <span>
+        <span
+          className={`${
+            validationstate.email === 0
+              ? "text-myBlack-1"
+              : validationstate.email === 1
+              ? "text-red-500"
+              : validationstate.email === 2
+              ? "text-green-800"
+              : null
+          }`}
+        >
           <AiOutlineUser />
         </span>
       ) : null}
-
+      
       <input
         value={value}
         type={type}
@@ -52,10 +63,9 @@ function MyInput({ placeHolder, type, value, onChange, validationstate }) {
         onChange={(e) => onChange(e.target.value)}
       />
       <span className="text-green-800 text-h6">
-        {type === "email" && validationstate.email === 2 ? <BsCheck /> : null}
-      </span>
-      <span>
-        {type == "password" && validationstate.password == 2 ? (
+        {type === "username" && validationstate.email === 2 ? (
+          <BsCheck />
+        ) : type == "password" && validationstate.password == 2 ? (
           <BsCheck />
         ) : null}
       </span>
