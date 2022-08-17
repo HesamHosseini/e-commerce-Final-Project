@@ -10,6 +10,18 @@ import { addToCart, removeFromCart } from "../../redux/slices/cartSlice";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast, ToastContainer } from "react-toastify";
 import styles from "../authentication/login.module.css"
+// import Swiper core and required modules
+import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from "swiper";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import Link from "next/link";
+import Image from "next/image";
 function singleProductId({ loadedProduct, categories }) {
 
 
@@ -22,6 +34,7 @@ function singleProductId({ loadedProduct, categories }) {
 console.log(loadedProduct)
   const dispatch = useDispatch()
 // *************** useEffect functions
+
   useEffect(() => {
     
     const availableInCart = Cart.find(item => item.id === loadedProduct.id)
@@ -59,8 +72,32 @@ console.log(loadedProduct)
     <MainLayout>
       <div className="grid grid-cols-12 rtl my-12 mx-4 font-IRYekan">
         <div className={`col-span-12 md:col-span-6 lg:col-span-5 justify-center items-center `}>
-          <img src={loadedProduct.main_image} className="border shadow rounded-2xl" />
-        </div>
+        <div className="w-full ">
+      <Swiper
+        className="w-full rounded-3xl"
+        modules={[Autoplay, Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={50}
+        slidesPerView={1}
+        navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        effect="fade"
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+            >
+              {[...loadedProduct.images, loadedProduct.main_image].map(image => (<SwiperSlide>
+          {/* <Link href="/"> */}
+            <div className="w-full text-center  ">
+              <Image width={300} height={300} src={image} />
+            </div>
+          {/* </Link> */}
+        </SwiperSlide>))}
+        
+
+      </Swiper>
+    </div>        </div>
         <div className="col-span-12 md:col-span-6 lg:col-span-7 m-4 gap-4 flex-col flex justify-evenly">
           <div>{loadedProduct.name}</div>
           <div className="flex items-center flex-row gap-4">
