@@ -4,8 +4,13 @@ export const cartSlice = createSlice({
   name: "cartSlice",
   initialState: {
     value: [
-      { id: 1, name: "shit", count: 1 },
-      { id: 2, name: "fuck", count: 5 },
+      {
+        id: 1,
+        name: "iphone 13 pro max 256 GB Green",
+        price: "53000000.00",
+        final_price: "53000000.00",
+        count: 1,
+      },
     ],
   },
 
@@ -48,10 +53,13 @@ export const cartSlice = createSlice({
         }
       }
     },
+    deleteFromCart: (state, action) => {
+      state.value = state.value.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, deleteFromCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
 

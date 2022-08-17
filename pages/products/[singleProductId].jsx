@@ -19,7 +19,7 @@ function singleProductId({ loadedProduct, categories }) {
   const loginStatus = useSelector((state) => state.loginStatusReducer.value);
   const [productCounter, setProductCounter] = useState(null);
 
-
+console.log(loadedProduct)
   const dispatch = useDispatch()
 // *************** useEffect functions
   useEffect(() => {
