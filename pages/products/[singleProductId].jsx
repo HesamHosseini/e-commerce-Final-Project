@@ -1,18 +1,60 @@
 import axios from "axios";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../../Layouts/MainLayout";
 import { BsForward } from "react-icons/bs";
 import {ePersian} from "../../utils/functions"
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import MyButton from "../../Components/Button/MyButton";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../../redux/slices/cartSlice";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { toast, ToastContainer } from "react-toastify";
+import styles from "../authentication/login.module.css"
 function singleProductId({ loadedProduct, categories }) {
 
-  console.log(loadedProduct)
-  const handleClick = (e) => {
-    console.log("shit")
+
+  
+  // *************** state managment
+  const Cart = useSelector(state => state.cartSliceReducer.value)
+  const loginStatus = useSelector((state) => state.loginStatusReducer.value);
+  const [productCounter, setProductCounter] = useState(null);
+
+console.log(loadedProduct)
+  const dispatch = useDispatch()
+// *************** useEffect functions
+  useEffect(() => {
+    
+    const availableInCart = Cart.find(item => item.id === loadedProduct.id)
+      if (availableInCart) {
+
+        setProductCounter(availableInCart.count)
+   } else setProductCounter(null)
+  }, [Cart]);
+
+
+
+  const handleClick = (product) => {
+    if (loginStatus.logedIn) {
+      dispatch(addToCart(product))
+    } else {
+    toast.error(
+      "برای اضافه کردن کالا به سبد خرید ابتدا وارد شوید ",
+      {
+        className: styles.fontYekan,
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
   }
+  }
+
+
+
   return (
     <MainLayout>
       <div className="grid grid-cols-12 rtl my-12 mx-4 font-IRYekan">
@@ -64,9 +106,24 @@ function singleProductId({ loadedProduct, categories }) {
               <FaRegMoneyBillAlt className="-rotate-45" />
             </span>
           </div>
-          <div className="flex flex-row">
-            <MyButton task={handleClick} bgColor={"bg-primary-1"} title="افزودن به سبد خرید" size={"large"} />
-          <input type="number" placeholder="1" className="w-14 px-3 border rounded-xl"/>
+          <div className="flex flex-row items-center  gap-4">
+            <div className={`${productCounter? "hidden" : ""}`}>
+            <MyButton task={() => {
+              handleClick(loadedProduct)
+            }} bgColor={"bg-primary-1"} title="افزودن به سبد خرید" size={"large"} />
+            </div>
+            <div className={`${productCounter? "flex-center" : "hidden"} rounded-md border border-primary-1 gap-5`}>
+              <i onClick={() => {
+                handleClick(loadedProduct)
+              }} className=" cursor-pointer  text-h4 bg-primary-1 text-myWhite-1  hover:bg-primary-0  transition-all duration-100 ">
+                <AiOutlinePlus/>
+              </i>
+              <span className="cursor-default select-none  text-p16 ">{productCounter}</span>
+              <i onClick={() => {
+                dispatch(removeFromCart(loadedProduct))
+              }} className=" cursor-pointer hover:bg-primary-0  transition-all duration-100 text-h4 bg-primary-1 text-myWhite-1">
+<AiOutlineMinus/></i>
+          </div>
           </div>
         
         </div>
@@ -77,6 +134,17 @@ function singleProductId({ loadedProduct, categories }) {
           {loadedProduct.description}
         </span>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </MainLayout>
   );
 }

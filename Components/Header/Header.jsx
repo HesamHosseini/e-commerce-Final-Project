@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { BsCart4 } from "react-icons/bs";
 import { BiExit } from "react-icons/bi";
 import { RiMenu3Line } from "react-icons/ri";
@@ -20,11 +20,23 @@ import { Listbox, Transition } from "@headlessui/react";
 import { MdOutlineUnfoldMore } from "react-icons/md";
 import { useRouter } from "next/router";
 import { GrLogin } from "react-icons/gr";
+import SearchAutoComplete from "../SearchAutoComplete/SearchAutoComplete";
+import axios from "axios";
 function Header() {
   const router = useRouter();
   const loginStatus = useSelector((state) => state.loginStatusReducer.value);
   const dispatch = useDispatch();
+  const [allProducts, setAllProducts] = useState([
+    { id: "292929292", name: "دنبال چی میگردی" },
+  ]);
+
+  console.log(allProducts);
   useEffect(() => {
+    axios
+      .get("http://localhost:8000/store/product/")
+      .then((res) => res.data)
+      .then((data) => setAllProducts(data));
+
     if (loginStatus.logedIn === false) {
       const cookieData = getCookie("token");
       if (cookieData) {
@@ -34,7 +46,7 @@ function Header() {
       }
     }
   }, []);
-  console.log(loginStatus);
+
   return (
     <Fragment>
       <ToastContainer
@@ -79,6 +91,47 @@ function Header() {
                       leaveTo="transform scale-95 opacity-0"
                     >
                       <Listbox.Options className="z-[2] absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-3  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm sm:text-sm">
+                        <Link href="/cart">
+                          <Listbox.Option
+                            className={({ active }) =>
+                              `font-IRYekan relative cursor-default select-none py-3 pl-10 pr-4 ${
+                                active
+                                  ? "bg-secondary-2 text-myBlack-1"
+                                  : "text-gray-900"
+                              }`
+                            }
+                            value={"سبد خرید"}
+                          >
+                            {({ selected }) => (
+                              <>
+                                <span
+                                  className={` truncate h-10 flex items-center gap-4 ${
+                                    selected ? "font-[14px]" : "font-[14px]"
+                                  }`}
+                                >
+                                  <span className="relative inline-block cursor-pointer ">
+                                    <i className="text-[20px]">
+                                      <BsCart4 />
+                                    </i>
+                                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                      99
+                                    </span>
+                                  </span>
+                                  <span>{"سبد خرید"}</span>
+                                </span>
+                                {selected ? (
+                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                                    <BiCheck
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        </Link>
+
                         <Listbox.Option
                           onClick={() => {
                             deleteCookie("token");
@@ -116,44 +169,6 @@ function Header() {
                             </>
                           )}
                         </Listbox.Option>
-                        <Listbox.Option
-                          className={({ active }) =>
-                            `font-IRYekan relative cursor-default select-none py-3 pl-10 pr-4 ${
-                              active
-                                ? "bg-secondary-2 text-myBlack-1"
-                                : "text-gray-900"
-                            }`
-                          }
-                          value={"سبد خرید"}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span
-                                className={` truncate h-10 flex items-center gap-4 ${
-                                  selected ? "font-[14px]" : "font-[14px]"
-                                }`}
-                              >
-                                <span className="relative inline-block cursor-pointer ">
-                                  <i className="text-[20px]">
-                                    <BsCart4 />
-                                  </i>
-                                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                    99
-                                  </span>
-                                </span>
-                                <span>{"سبد خرید"}</span>
-                              </span>
-                              {selected ? (
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                  <BiCheck
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
                       </Listbox.Options>
                     </Transition>
                   </div>
@@ -172,18 +187,21 @@ function Header() {
           )}
         </div>
 
-        <div className="righttems  flex-center gap-4 ">
-          <input
-            className="h-[90%]  px-11 rounded rtl text-myBlack-1 font-IRYekan md:text-p16 lg:text-p18 focus-visible:border-primary-1 focus-visible:border-2 focus-visible: outline-none shadow-none"
-            placeholder="دنبال چی میگردی"
-          />
-          <span className="md:text-h3 lg:text-h1">حسام کالا</span>
-          <Image
-            className="rounded-[50%]"
-            height="50"
-            width="50"
-            src="/logo2.jpeg"
-          />
+        <div className="righttems  flex-center gap-4 z-50">
+          <SearchAutoComplete people={allProducts} />
+          <Link href="/">
+            <span className="cursor-pointer md:text-h3 lg:text-h1">
+              حسام کالا
+            </span>
+          </Link>
+          <Link href="/">
+            <Image
+              className="cursor-pointer rounded-[50%]"
+              height="100"
+              width="100"
+              src="/logo2.jpeg"
+            />
+          </Link>
         </div>
       </div>
       {/* ************************************ mobile Header
@@ -209,7 +227,7 @@ function Header() {
           />
         </i>
       </div>
-      <DrowerMenu />
+      <DrowerMenu allProducts={allProducts} />
     </Fragment>
   );
 }
