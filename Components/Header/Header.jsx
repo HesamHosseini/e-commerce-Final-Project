@@ -1,15 +1,15 @@
 import Image from "next/image";
 import React, { Fragment, useEffect } from "react";
 import { BsCart4 } from "react-icons/bs";
-import { RiMenu3Line } from "react-icons/ri";
 import { BiExit } from "react-icons/bi";
+import { RiMenu3Line } from "react-icons/ri";
+import { IoIosLogIn } from "react-icons/io";
 import DrowerMenu from "./DrowerMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { setDrowerState } from "../../redux/slices/headerSlice";
 import { deleteCookie, getCookie } from "cookies-next";
 import { dataParse } from "../../utils/functions";
 import Link from "next/link";
-import { IoIosLogIn } from "react-icons/io";
 import {
   setUserData,
   setUserLoginStatus,
@@ -20,14 +20,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { MdOutlineUnfoldMore } from "react-icons/md";
 import { useRouter } from "next/router";
 import { GrLogin } from "react-icons/gr";
-
-const test = [
-  { name: "همه محصولات" },
-  { name: "باتخفیف" },
-  { name: "بدون تخفیف" },
-];
-
-function Header(props) {
+function Header() {
   const router = useRouter();
   const loginStatus = useSelector((state) => state.loginStatusReducer.value);
   const dispatch = useDispatch();
@@ -65,8 +58,8 @@ function Header(props) {
                   className="w-full"
                 >
                   <div className="relative mt-1 w-full">
-                    <Listbox.Button className="font-IRYekan relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
-                      <span className="block truncate">
+                    <Listbox.Button className="font-IRYekan relative w-full cursor-default flex-center rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
+                      <span className="flex-center gap-3 truncate">
                         <span>عزیز خوش آمدید</span>
                         <span>{loginStatus.userData.userInfo.username}</span>
                       </span>
