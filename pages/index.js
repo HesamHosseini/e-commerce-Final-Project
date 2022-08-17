@@ -11,7 +11,6 @@ import StoreGirl from "../Components/MainScreen/StoreGirl";
 import ProductCard from "../Components/ProductCard/ProductCard";
 import MainLayout from "../Layouts/MainLayout";
 export default function Home({ categories, products }) {
-  console.log(products);
   return (
     <MainLayout>
       <Head>

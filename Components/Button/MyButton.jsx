@@ -1,8 +1,9 @@
 import React from "react";
 
-function MyButton({ bgColor, task, size, title }) {
+function MyButton({ bgColor, task, size, title, type }) {
   return (
     <button
+      type={type ? type : "button"}
       onClick={task}
       className={`
       ${bgColor}
@@ -15,7 +16,7 @@ function MyButton({ bgColor, task, size, title }) {
           ? "px-6 rounded-xl py-3 text-[14px]"
           : ""
       }
-              hover:text-myWhite-1 transition-all
+            hover:text-myWhite-1 transition-all
       `}
     >
       {title}
