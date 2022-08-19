@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../../Layouts/MainLayout";
 import { IoTrashBin } from "react-icons/io";
@@ -15,12 +15,30 @@ import {
 } from "../../redux/slices/cartSlice";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { dataParse, ePersian } from "../../utils/functions";
+import { getCookie } from "cookies-next";
+import {
+  setUserData,
+  setUserLoginStatus,
+} from "../../redux/slices/loginStatusSlice";
 function Cart() {
   const loginStatus = useSelector((state) => state.loginStatusReducer.value);
   const dispatch = useDispatch();
   const [row, setRow] = useState(1);
   const cartItems = useSelector((state) => state.cartSliceReducer.value);
   const router = useRouter();
+
+  useEffect(() => {
+    if (loginStatus.logedIn === false) {
+      const cookieData = getCookie("token");
+      if (cookieData) {
+        const data = dataParse(cookieData);
+        dispatch(setUserLoginStatus(true));
+        dispatch(setUserData(data));
+      }
+    }
+  }, []);
+
   if (loginStatus.logedIn) {
     return (
       //   {loginStatus.logedIn ?   : null}
@@ -42,17 +60,37 @@ function Cart() {
               <tbody>
                 {cartItems.map((item, index) => (
                   <tr className=" text-center border-b text-[16px]">
-                    <td>{index + 1}</td>
+                    <td>{ePersian(index + 1)}</td>
                     <td>{item.name}</td>
-                    <td>{item.price}</td>
-                    <td>{item.final_price}</td>
-                    <td>{item.final_price * item.count}</td>
-                    <td>
+                    <td className>
+                      <span>{ePersian(Math.floor(item.price))}</span>
+                      <span className="text-[10px] text-red-500 px-2">
+                        تومان
+                      </span>
+                    </td>
+                    <td className>
+                      <span>{ePersian(Math.floor(item.final_price))}</span>
+                      <span className="text-[10px] text-red-500 px-2">
+                        تومان
+                      </span>
+                    </td>
+                    <td className>
+                      <span>{ePersian(item.final_price * item.count)}</span>
+                      <span className="text-[10px] text-red-500 px-2">
+                        تومان
+                      </span>
+                    </td>
+                    <td className="flex-center">
                       <div className="flex-center gap-1 ">
                         <div className="flex-center border border-primary-1 rounded-md gap-3">
                           <i
                             onClick={() => {
-                              dispatch(addToCart(item));
+                              if (item.remaining >= 1) {
+                                const temp = { ...item };
+                                temp.remaining--;
+                                console.log(temp);
+                                dispatch(addToCart(temp));
+                              }
                             }}
                             className="bg-primary-1 w-full h-full text-h5 text-myWhite-1 cursor-pointer hover:bg-primary-0  transition-all duration-100"
                           >
@@ -82,6 +120,45 @@ function Cart() {
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+            <table
+              table
+              className="w-full mx-auto border-t border-b border-l table-fixed rtl font-IRYekan text-p16"
+            >
+              <tbody>
+                <tr className="border-b">
+                  <td className="border-l text-center">
+                    {" "}
+                    سود شما از این خرید :
+                  </td>
+                  <td className="border-l text-center">
+                    <span>
+                      {ePersian(
+                        cartItems.reduce(function (prev, cur) {
+                          return cur.price * cur.count + prev;
+                        }, 0) -
+                          cartItems.reduce(function (prev, cur) {
+                            return cur.final_price * cur.count + prev;
+                          }, 0)
+                      )}
+                    </span>
+                    <span className="text-[10px] text-red-500 px-2">تومان</span>
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="border-l text-center">قیمت نهایی فاکتور :</td>
+                  <td className="border-l text-center">
+                    <span>
+                      {ePersian(
+                        cartItems.reduce(function (prev, cur) {
+                          return cur.final_price * cur.count + prev;
+                        }, 0)
+                      )}
+                    </span>
+                    <span className="text-[10px] text-red-500 px-2">تومان</span>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

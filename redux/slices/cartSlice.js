@@ -3,15 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const cartSlice = createSlice({
   name: "cartSlice",
   initialState: {
-    value: [
-      {
-        id: 1,
-        name: "iphone 13 pro max 256 GB Green",
-        price: "53000000.00",
-        final_price: "53000000.00",
-        count: 1,
-      },
-    ],
+    value: [],
   },
 
   reducers: {
@@ -25,6 +17,7 @@ export const cartSlice = createSlice({
             return {
               ...isAvailable,
               count: isAvailable.count++,
+              remaining: isAvailable.remaining--,
             };
           } else return item;
         });
@@ -46,6 +39,7 @@ export const cartSlice = createSlice({
             if (item.id === isAvailable.id) {
               return {
                 ...isAvailable,
+                remaining: isAvailable.remaining++,
                 count: isAvailable.count--,
               };
             } else return item;
