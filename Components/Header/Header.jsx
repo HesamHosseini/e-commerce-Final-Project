@@ -29,11 +29,9 @@ function Header() {
   const [allProducts, setAllProducts] = useState([
     { id: "292929292", name: "دنبال چی میگردی" },
   ]);
-
-  console.log(allProducts);
   useEffect(() => {
     axios
-      .get("http://localhost:8000/store/product/")
+      .get("https://e-commerce.iran.liara.run/store/product/")
       .then((res) => res.data)
       .then((data) => setAllProducts(data));
 

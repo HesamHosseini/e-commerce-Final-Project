@@ -221,7 +221,9 @@ function category({ data, childCategories, thisCategory }) {
 export default category;
 
 export async function getStaticPaths() {
-  const res = await axios.get("http://localhost:8000/store/category");
+  const res = await axios.get(
+    "https://e-commerce.iran.liara.run/store/category"
+  );
   const categories = await res.data;
 
   const categoriesRoute = await categories.map((category) => ({
@@ -236,14 +238,16 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const response2 = await axios.get(`http://localhost:8000/store/category`);
+  const response2 = await axios.get(
+    `https://e-commerce.iran.liara.run/store/category`
+  );
   const categories = response2.data;
   const singleCategory = categories.filter(
     (item) => item.slug == params.category
   );
 
   const response = await axios.get(
-    `http://localhost:8000/store/product/category/slug/${params.category}`
+    `https://e-commerce.iran.liara.run/store/product/category/slug/${params.category}`
   );
   const Mainproducts = await response.data;
 
@@ -253,7 +257,7 @@ export async function getStaticProps({ params }) {
     for (const childrenCategories of singleCategory[0].children) {
       const response = await axios
         .get(
-          `http://localhost:8000/store/product/category/slug/${childrenCategories.slug}`
+          `https://e-commerce.iran.liara.run/store/product/category/slug/${childrenCategories.slug}`
         )
         .then((res) => res.data);
       response.forEach((item) => {

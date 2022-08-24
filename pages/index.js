@@ -61,16 +61,11 @@ export default function Home({ categories, products }) {
   );
 }
 export async function getServerSideProps(context) {
-  const res = await fetch("http://localhost:8000/store/category");
+  const res = await fetch("https://e-commerce.iran.liara.run/store/category");
   const categories = await res.json();
 
   const productsPromis = await axios.get(
-    "http://localhost:8000/store/product",
-    {
-      headers: {
-        Authorization: "Token daa15a1f35ec2dcdaa608ca1380a173e4d39e410",
-      },
-    }
+    "https://e-commerce.iran.liara.run/store/product"
   );
   const products = await productsPromis.data;
   return {

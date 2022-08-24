@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../../Layouts/MainLayout";
 import { IoTrashBin } from "react-icons/io";
+import { BsCreditCard2Back } from "react-icons/bs";
+
 import { BsTrash } from "react-icons/bs";
 import {
   AiFillCloseCircle,
@@ -45,8 +47,8 @@ function Cart() {
       <MainLayout>
         <div className="w-full px-5 ">
           <div className="rtl font-IRYekanBold text-h6 py-5">سبد خرید شما </div>
-          <div className="overflow-x-auto overflow-y-hidden">
-            <table className="w-full mx-auto table-fixed rtl font-IRYekan text-p16">
+          <div className="overflow-x-auto overflow-y-hidden ">
+            <table className="w-full min-w-[700px] table-auto rtl font-IRYekan text-p16">
               <thead>
                 <tr className="text-[10px] ">
                   <th className="border">ردیف</th>
@@ -124,7 +126,7 @@ function Cart() {
             </table>
             <table
               table
-              className="w-full mx-auto border-t border-b border-l table-fixed rtl font-IRYekan text-p16"
+              className="l w-full min-w-[700px] table-auto mx-auto border-t border-b border-l  rtl font-IRYekan text-p16"
             >
               <tbody>
                 <tr className="border-b">
@@ -161,6 +163,16 @@ function Cart() {
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div className="rtl grid grid-cols-12 my-16">
+            <Link href="/proceedToPayment">
+              <div className="col-span-12 flex-center gap-3 bg-primary-1 rounded-md py-3 hover:animate-bounce cursor-pointer	 text-myWhite-1 md:col-span-2 font-IRYekan text-center ">
+                <span>تکمیل سفارش</span>
+                <i>
+                  <BsCreditCard2Back />
+                </i>
+              </div>
+            </Link>
           </div>
         </div>
       </MainLayout>

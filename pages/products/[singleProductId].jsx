@@ -233,13 +233,7 @@ export default singleProductId;
 
 export async function getStaticPaths() {
   const productsPromis = await axios.get(
-    "http://localhost:8000/store/product",
-    {
-      headers: {
-        Authorization: "Token daa15a1f35ec2dcdaa608ca1380a173e4d39e410",
-      },
-    }
-  );
+    "https://e-commerce.iran.liara.run/store/product");
   const products = await productsPromis.data;
   const ProductIds = await products.map((product) => ({
     params: {
@@ -257,19 +251,14 @@ export async function getStaticProps({ params }) {
   let loadedProduct;
   try {
     const productsPromis = await axios.get(
-      `http://localhost:8000/store/product/id/${singleProductId}`,
-      {
-        headers: {
-          Authorization: "Token daa15a1f35ec2dcdaa608ca1380a173e4d39e410",
-        },
-      }
+      `https://e-commerce.iran.liara.run/store/product/id/${singleProductId}`
     );
     loadedProduct = await productsPromis.data;
   } catch (e) {
     loadedProduct = null;
   }
   const categoryPromise = await axios.get(
-    "http://localhost:8000/store/category"
+    "https://e-commerce.iran.liara.run/store/category"
   );
   const categories = await categoryPromise.data;
   return {

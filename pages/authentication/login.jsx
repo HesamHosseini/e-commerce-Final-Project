@@ -37,7 +37,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loginValidation.email === 2 && loginValidation.password === 2) {
-      const res = await fetch("http://localhost:8000/user/login/", {
+      const res = await fetch("https://e-commerce.iran.liara.run/user/login/", {
         method: "POST",
         headers: {
           Accept: "application/json",
