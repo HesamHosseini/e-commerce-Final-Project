@@ -81,7 +81,7 @@ function SignUp(props) {
       inputValidation.username === 2 &&
       acceptPolicy === true
     ) {
-      const res = await fetch("http://localhost:8000/user/register/", {
+      const res = await fetch("https://e-commerce.iran.liara.run/user/register/", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -94,7 +94,7 @@ function SignUp(props) {
       });
       const registerRes = await res.json();
 
-      const loginReq = await fetch("http://localhost:8000/user/login/", {
+      const loginReq = await fetch("https://e-commerce.iran.liara.run/user/login/", {
         method: "POST",
         headers: {
           Accept: "application/json",

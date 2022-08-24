@@ -22,6 +22,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Link from "next/link";
 import Image from "next/image";
+
 function singleProductId({ loadedProduct, categories }) {
 
 
@@ -30,14 +31,16 @@ function singleProductId({ loadedProduct, categories }) {
   const Cart = useSelector(state => state.cartSliceReducer.value)
   const loginStatus = useSelector((state) => state.loginStatusReducer.value);
   const [productCounter, setProductCounter] = useState(null);
+  const [singleProduct , setSingleProduct] = useState(loadedProduct)
+  console.log(singleProduct)
+  console.log(Cart);
 
-console.log(loadedProduct)
   const dispatch = useDispatch()
 // *************** useEffect functions
 
   useEffect(() => {
     
-    const availableInCart = Cart.find(item => item.id === loadedProduct.id)
+    const availableInCart = Cart.find(item => item.id === singleProduct.id)
       if (availableInCart) {
 
         setProductCounter(availableInCart.count)
@@ -46,9 +49,29 @@ console.log(loadedProduct)
 
 
 
-  const handleClick = (product) => {
+  const handleClick = () => {
     if (loginStatus.logedIn) {
-      dispatch(addToCart(product))
+      if (singleProduct.remaining >= 1) {
+        const temp = { ...singleProduct }
+        temp.remaining = singleProduct.remaining - 1
+        setSingleProduct(temp)
+        console.log(temp)
+        dispatch(addToCart(temp))
+      } else {
+        toast.error(
+          "متاسفانه تعداد بیشتر موجود نمیباشد",
+          {
+            className: styles.fontYekan,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
+      }
     } else {
     toast.error(
       "برای اضافه کردن کالا به سبد خرید ابتدا وارد شوید ",
@@ -66,6 +89,12 @@ console.log(loadedProduct)
   }
   }
 
+  const handleDecreaseClick = () => {
+    const temp = { ...singleProduct }
+        temp.remaining = singleProduct.remaining + 1
+        setSingleProduct(temp)
+    dispatch(removeFromCart(singleProduct))
+}
 
 
   return (
@@ -87,44 +116,40 @@ console.log(loadedProduct)
           disableOnInteraction: false,
         }}
             >
-              {[...loadedProduct.images, loadedProduct.main_image].map(image => (<SwiperSlide>
-          {/* <Link href="/"> */}
+              {[...singleProduct.images  , singleProduct.main_image].map(image => (<SwiperSlide>
+
             <div className="w-full text-center  ">
               <Image width={300} height={300} src={image} />
             </div>
-          {/* </Link> */}
         </SwiperSlide>))}
-        
-
       </Swiper>
     </div>        </div>
         <div className="col-span-12 md:col-span-6 lg:col-span-7 m-4 gap-4 flex-col flex justify-evenly">
-          <div>{loadedProduct.name}</div>
+          <div>{singleProduct.name}</div>
           <div className="flex items-center flex-row gap-4">
             <div>دسته بندی :</div>
             <div>
               {
-                categories.filter((item) => item.id == loadedProduct.category)[0].parent?
+                categories.filter((item) => item.id == singleProduct.category)[0].parent?
                   .name
               }
             </div>
             <BsForward
               className={
-                categories.filter((item) => item.id == loadedProduct.category)[0]
+                categories.filter((item) => item.id == singleProduct.category)[0]
                   .parent === null
                   ? "hidden"
                   : ""
               }
             />
             <div>
-              {categories.filter((item) => item.id == loadedProduct.category)[0].name}
+              {categories.filter((item) => item.id == singleProduct.category)[0].name}
             </div>
           </div>
-          <div className={`${loadedProduct.final_price !== loadedProduct.price ? "line-through decoration-2 decoration-primary-1" : ""} flex items-center gap-4 ` }>
+          <div className={`${singleProduct.final_price !== singleProduct.price ? "line-through decoration-2 decoration-primary-1" : ""} flex items-center gap-4 ` }>
             <div>قیمت :‌</div>
-            <div className="">
-
-            {ePersian(Math.floor(loadedProduct.price)  )}
+            <div>
+            {ePersian(Math.floor(singleProduct.price)  )}
             </div>
             <span className="flex items-center">تومان
             <FaRegMoneyBillAlt className="-rotate-45" />
@@ -132,11 +157,11 @@ console.log(loadedProduct)
           </div>
           <div
             className={`${
-              loadedProduct.final_price === loadedProduct.price ? "hidden" : ""
+              singleProduct.final_price === singleProduct.price ? "hidden" : ""
             } rtl flex-center gap-3  text-primary-1 text-h6`}
           >
             <span> قیمت با تخفیف :</span>
-            <span>{ePersian(Math.floor(loadedProduct.final_price))}</span>
+            <span>{ePersian(Math.floor(singleProduct.final_price))}</span>
 
             <span className="flex-center gap-1">
               <span>تومان</span>
@@ -144,20 +169,38 @@ console.log(loadedProduct)
             </span>
           </div>
           <div className="flex flex-row items-center  gap-4">
-            <div className={`${productCounter? "hidden" : ""}`}>
+            <div className={`${productCounter? "hidden" : ""}  ${singleProduct.remaining===0 ? "hidden" : ""}`}>
             <MyButton task={() => {
-              handleClick(loadedProduct)
+              handleClick(singleProduct)
             }} bgColor={"bg-primary-1"} title="افزودن به سبد خرید" size={"large"} />
+            </div>
+            <div className={`${productCounter? "hidden" : ""}  ${singleProduct.remaining===0 ? "": "hidden"}`}>
+            <MyButton task={() => {
+                 toast.error(
+          "کالای مورد نظر موجود نمیباشد",
+          {
+            className: styles.fontYekan,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
+            }} bgColor={"bg-slate-300"} title="ناموجود " size={"large"} />
             </div>
             <div className={`${productCounter? "flex-center" : "hidden"} rounded-md border border-primary-1 gap-5`}>
               <i onClick={() => {
-                handleClick(loadedProduct)
+                handleClick(singleProduct)
               }} className=" cursor-pointer  text-h4 bg-primary-1 text-myWhite-1  hover:bg-primary-0  transition-all duration-100 ">
                 <AiOutlinePlus/>
               </i>
               <span className="cursor-default select-none  text-p16 ">{productCounter}</span>
               <i onClick={() => {
-                dispatch(removeFromCart(loadedProduct))
+                handleDecreaseClick(singleProduct)
+               
               }} className=" cursor-pointer hover:bg-primary-0  transition-all duration-100 text-h4 bg-primary-1 text-myWhite-1">
 <AiOutlineMinus/></i>
           </div>
@@ -168,7 +211,7 @@ console.log(loadedProduct)
       <div className="mx-4 font-IRYekan rtl:">
         <div className="rtl text-secondary-2 font-IRYekanBold text-h4">توضیحات : </div>
         <span className="rtl flex-center gap-7 text-myBlack-1 text-p16">
-          {loadedProduct.description}
+          {singleProduct.description}
         </span>
       </div>
       <ToastContainer
@@ -190,13 +233,7 @@ export default singleProductId;
 
 export async function getStaticPaths() {
   const productsPromis = await axios.get(
-    "http://localhost:8000/store/product",
-    {
-      headers: {
-        Authorization: "Token daa15a1f35ec2dcdaa608ca1380a173e4d39e410",
-      },
-    }
-  );
+    "https://e-commerce.iran.liara.run/store/product");
   const products = await productsPromis.data;
   const ProductIds = await products.map((product) => ({
     params: {
@@ -205,7 +242,7 @@ export async function getStaticPaths() {
   }));
   return {
     paths: ProductIds,
-    fallback: false, // false or 'blocking'
+    fallback: false,
   };
 }
 
@@ -214,25 +251,20 @@ export async function getStaticProps({ params }) {
   let loadedProduct;
   try {
     const productsPromis = await axios.get(
-      `http://localhost:8000/store/product/id/${singleProductId}`,
-      {
-        headers: {
-          Authorization: "Token daa15a1f35ec2dcdaa608ca1380a173e4d39e410",
-        },
-      }
+      `https://e-commerce.iran.liara.run/store/product/id/${singleProductId}`
     );
     loadedProduct = await productsPromis.data;
   } catch (e) {
     loadedProduct = null;
   }
   const categoryPromise = await axios.get(
-    "http://localhost:8000/store/category"
+    "https://e-commerce.iran.liara.run/store/category"
   );
   const categories = await categoryPromise.data;
   return {
     props: {
       loadedProduct,
       categories,
-    }, // will be passed to the page component as props
+    },
   };
 }
