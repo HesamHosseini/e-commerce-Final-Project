@@ -55,7 +55,7 @@ function ProceedToPayment() {
       }
     );
     const ans = await response.json();
-    router.back();
+    router.push("/");
   };
 
   return (
